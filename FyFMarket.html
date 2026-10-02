@@ -1,0 +1,1554 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FyF (Find your Fashion) | Marketplace Fashion Cyan 2026</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyanbrand: {
+                            50: '#ecfeff',
+                            100: '#cffafe',
+                            200: '#a5f3fc',
+                            300: '#67e8f9',
+                            400: '#22d3ee',
+                            500: '#06b6d4', // Primary Vibrant Cyan
+                            600: '#0891b2', // Deep Cyan
+                            700: '#0e7490',
+                            800: '#155e75',
+                            900: '#164e63',
+                            glow: '#00f0ff'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'cyan-glow': '0 0 25px -3px rgba(6, 182, 212, 0.45)',
+                        'cyan-glow-lg': '0 0 35px 2px rgba(0, 240, 255, 0.35)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts & FontAwesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Vue 3 CDN -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #F8FAFC;
+            color: #0F172A;
+        }
+        /* Custom Cyan Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #ecfeff;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #06b6d4;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0891b2;
+        }
+        /* Glassmorphism Cyan Tint */
+        .glass-cyan {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(165, 243, 252, 0.6);
+        }
+        .glass-dark-cyan {
+            background: rgba(22, 78, 99, 0.9);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+        }
+        /* Gradient animations */
+        .bg-cyan-gradient {
+            background: linear-gradient(135deg, #00f0ff 0%, #06b6d4 50%, #0891b2 100%);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased selection:bg-cyanbrand-500 selection:text-white">
+
+<div id="app" class="min-h-screen flex flex-col justify-between relative">
+
+    <!-- Announcement Bar Cyan 2026 -->
+    <div class="bg-gradient-to-r from-cyanbrand-900 via-cyanbrand-600 to-cyanbrand-500 text-white text-xs font-medium py-2.5 px-4 text-center tracking-wide flex items-center justify-center gap-2 shadow-md">
+        <span class="bg-white text-cyanbrand-800 text-[10px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider animate-pulse">2026 CYAN COLLECTION</span>
+        <span>⛩️️ & 🇰🇷 <strong class="font-bold text-cyanbrand-100">Koleksi Fashion Jepang & Korea Cyan 2026 Tiba!</strong> Gunakan Voucher <strong class="text-amber-300 underline underline-offset-2">FYFCYAN2026</strong> Diskon 20%</span>
+        <button @click="copyVoucher" class="ml-2 bg-white/20 hover:bg-white/30 text-white px-2.5 py-0.5 rounded-lg text-[11px] font-bold transition">Klaim Promo</button>
+    </div>
+
+    <!-- Header / Navigation Bar -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-cyanbrand-100 shadow-sm transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20 gap-4">
+                
+                <!-- Brand Logo & Nav items -->
+                <div class="flex items-center gap-6">
+                    <a href="#" @click.prevent="resetFilters" class="flex items-center gap-2.5 group">
+                        <div class="w-11 h-11 rounded-2xl bg-cyan-gradient flex items-center justify-center text-white shadow-cyan-glow group-hover:scale-105 transition-transform duration-300">
+                            <i class="fa-solid fa-shirt text-xl text-white"></i>
+                        </div>
+                        <div class="flex flex-col">
+                            <div class="flex items-center gap-1.5">
+                                <span class="font-black text-2xl tracking-tight text-slate-900 group-hover:text-cyanbrand-600 transition-colors">FyF</span>
+                                <span class="bg-cyanbrand-100 text-cyanbrand-800 text-[10px] font-black px-1.5 py-0.5 rounded-md border border-cyanbrand-300">Cyan 2026</span>
+                            </div>
+                            <span class="text-[10px] tracking-wider text-cyanbrand-600 uppercase font-bold">Find your Fashion</span>
+                        </div>
+                    </a>
+
+                    <!-- Desktop Nav Links -->
+                    <nav class="hidden lg:flex items-center gap-1 text-xs font-extrabold text-slate-600">
+                        <button @click="setActiveStyle('Semua')" :class="{'text-cyanbrand-600 bg-cyanbrand-50': selectedStyle === 'Semua'}" class="px-3.5 py-2 rounded-xl hover:text-cyanbrand-600 hover:bg-cyanbrand-50/60 transition">Beranda</button>
+                        <button @click="setActiveStyle('Japanese Style')" :class="{'text-cyanbrand-600 bg-cyanbrand-50': selectedStyle === 'Japanese Style'}" class="px-3.5 py-2 rounded-xl hover:text-cyanbrand-600 hover:bg-cyanbrand-50/60 transition flex items-center gap-1.5">
+                            <span>⛩️ Style Jepang</span>
+                        </button>
+                        <button @click="setActiveStyle('Korean Style')" :class="{'text-cyanbrand-600 bg-cyanbrand-50': selectedStyle === 'Korean Style'}" class="px-3.5 py-2 rounded-xl hover:text-cyanbrand-600 hover:bg-cyanbrand-50/60 transition flex items-center gap-1.5">
+                            <span>🇰🇷 Style Korea</span>
+                        </button>
+                        <button @click="setActiveStyle('2026 Techwear')" :class="{'text-cyanbrand-600 bg-cyanbrand-50': selectedStyle === '2026 Techwear'}" class="px-3.5 py-2 rounded-xl hover:text-cyanbrand-600 hover:bg-cyanbrand-50/60 transition flex items-center gap-1">
+                            <i class="fa-solid fa-bolt text-cyanbrand-400"></i> Techwear 2026
+                        </button>
+                        <button @click="openModal('stylist')" class="px-3.5 py-2 rounded-xl bg-cyanbrand-50 text-cyanbrand-700 hover:bg-cyanbrand-100 transition flex items-center gap-1.5 border border-cyanbrand-200">
+                            <i class="fa-solid fa-wand-magic-sparkles text-cyanbrand-500"></i> AI Virtual Stylist
+                        </button>
+                    </nav>
+                </div>
+
+                <!-- Search Bar with Auto Suggestion -->
+                <div class="flex-1 max-w-md relative hidden md:block">
+                    <div class="relative">
+                        <input 
+                            type="text" 
+                            v-model="searchQuery" 
+                            @focus="showSearchSuggest = true"
+                            @blur="setTimeout(() => showSearchSuggest = false, 200)"
+                            placeholder="Cari Harajuku, Seoul Minimalist, Cyber Cyan..." 
+                            class="w-full pl-10 pr-10 py-2.5 bg-slate-100/90 border border-slate-200 rounded-full text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-cyanbrand-500 focus:bg-white transition-all shadow-inner"
+                        >
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-cyanbrand-500 text-xs"></i>
+                        <button v-if="searchQuery" @click="searchQuery = ''" class="absolute right-3.5 top-3 text-slate-400 hover:text-slate-600 text-xs">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+
+                    <!-- Auto Suggestion Dropdown -->
+                    <div v-if="showSearchSuggest && searchQuery.length > 0" class="absolute left-0 right-0 top-full mt-2 bg-white rounded-2xl shadow-cyan-glow border border-cyanbrand-200 overflow-hidden z-50 p-2">
+                        <div class="text-[10px] font-bold text-cyanbrand-600 uppercase tracking-wider px-3 py-1.5">Rekomendasi Outfit</div>
+                        <div v-if="filteredProducts.length === 0" class="px-3 py-4 text-center text-xs text-slate-500">
+                            Tidak ada produk cocok dengan "{{ searchQuery }}"
+                        </div>
+                        <div v-else class="max-h-60 overflow-y-auto space-y-1">
+                            <div 
+                                v-for="item in filteredProducts.slice(0, 4)" 
+                                :key="item.id" 
+                                @mousedown="openQuickView(item)"
+                                class="flex items-center gap-3 p-2 hover:bg-cyanbrand-50 rounded-xl cursor-pointer transition"
+                            >
+                                <img :src="item.image" :alt="item.name" class="w-10 h-10 object-cover rounded-lg border border-cyanbrand-100">
+                                <div class="flex-1 min-w-0">
+                                    <h4 class="text-xs font-bold text-slate-800 truncate">{{ item.name }}</h4>
+                                    <p class="text-[11px] font-extrabold text-cyanbrand-600">{{ formatRupiah(item.price) }}</p>
+                                </div>
+                                <span class="text-[10px] bg-cyanbrand-100 text-cyanbrand-800 px-2 py-0.5 rounded-full font-bold">{{ item.style }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Utility Icons & Actions -->
+                <div class="flex items-center gap-2 sm:gap-3">
+                    
+                    <!-- Wishlist Button -->
+                    <button @click="openModal('wishlist')" class="relative p-2.5 rounded-full hover:bg-cyanbrand-50 text-slate-700 hover:text-cyanbrand-600 transition" title="Wishlist">
+                        <i class="fa-regular fa-heart text-xl"></i>
+                        <span v-if="wishlist.length > 0" class="absolute top-1 right-1 w-5 h-5 bg-rose-500 text-white rounded-full text-[10px] font-extrabold flex items-center justify-center border-2 border-white shadow-sm animate-pulse">
+                            {{ wishlist.length }}
+                        </span>
+                    </button>
+
+                    <!-- Cart Drawer Trigger Button -->
+                    <button @click="openModal('cart')" class="relative flex items-center gap-2 bg-cyanbrand-500 hover:bg-cyanbrand-600 text-white px-3.5 py-2.5 rounded-full font-bold text-xs shadow-cyan-glow transition duration-200">
+                        <div class="relative">
+                            <i class="fa-solid fa-bag-shopping text-base"></i>
+                            <span v-if="cartTotalCount > 0" class="absolute -top-2 -right-2.5 bg-white text-cyanbrand-800 text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center border-2 border-cyanbrand-500">
+                                {{ cartTotalCount }}
+                            </span>
+                        </div>
+                        <span class="hidden sm:inline font-extrabold pl-1 border-l border-cyanbrand-300">
+                            {{ formatRupiah(cartSubtotal) }}
+                        </span>
+                    </button>
+
+                    <!-- Verified Profile Button (Int1omlen desainer) -->
+                    <button @click="openModal('profile')" class="flex items-center gap-2 p-1.5 pl-2.5 pr-2 rounded-full bg-cyanbrand-50 hover:bg-cyanbrand-100 border border-cyanbrand-200 text-slate-800 transition group">
+                        <div class="flex flex-col text-right hidden sm:block">
+                            <span class="text-xs font-black text-slate-900 group-hover:text-cyanbrand-600">Int1omlen</span>
+                            <span class="text-[9px] font-bold text-cyanbrand-700 bg-white px-1.5 rounded border border-cyanbrand-200">Desainer 2026</span>
+                        </div>
+                        <div class="w-8 h-8 rounded-full bg-cyan-gradient text-white flex items-center justify-center font-bold text-xs shadow-sm">
+                            <i class="fa-solid fa-pen-nib text-xs"></i>
+                        </div>
+                    </button>
+
+                    <!-- Mobile Menu Toggle -->
+                    <button @click="mobileMenuOpen = !mobileMenuOpen" class="lg:hidden p-2 text-slate-700 text-xl focus:outline-none">
+                        <i :class="mobileMenuOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars'"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Search Bar -->
+            <div class="md:hidden pb-3">
+                <input 
+                    type="text" 
+                    v-model="searchQuery" 
+                    placeholder="Cari fashion Jepang, Korea, Cyan Techwear..." 
+                    class="w-full pl-10 pr-4 py-2 bg-slate-100 rounded-full text-xs font-medium border border-slate-200 focus:outline-none focus:ring-2 focus:ring-cyanbrand-500"
+                >
+            </div>
+        </div>
+
+        <!-- Mobile Menu Drawer -->
+        <div v-if="mobileMenuOpen" class="lg:hidden bg-white border-b border-cyanbrand-100 px-4 pt-2 pb-6 space-y-3">
+            <div class="font-bold text-xs text-cyanbrand-600 uppercase tracking-wider">Kategori & Style 2026</div>
+            <div class="grid grid-cols-2 gap-2 text-xs font-bold">
+                <button @click="setActiveStyle('Semua'); mobileMenuOpen=false" class="text-left p-2.5 rounded-xl bg-slate-50 hover:bg-cyanbrand-50 hover:text-cyanbrand-600">Semua Koleksi</button>
+                <button @click="setActiveStyle('Japanese Style'); mobileMenuOpen=false" class="text-left p-2.5 rounded-xl bg-slate-50 hover:bg-cyanbrand-50 hover:text-cyanbrand-600">⛩️ Japanese Style</button>
+                <button @click="setActiveStyle('Korean Style'); mobileMenuOpen=false" class="text-left p-2.5 rounded-xl bg-slate-50 hover:bg-cyanbrand-50 hover:text-cyanbrand-600">🇰🇷 Korean Style</button>
+                <button @click="setActiveStyle('2026 Techwear'); mobileMenuOpen=false" class="text-left p-2.5 rounded-xl bg-slate-50 hover:bg-cyanbrand-50 hover:text-cyanbrand-600">⚡ Techwear 2026</button>
+                <button @click="openModal('stylist'); mobileMenuOpen=false" class="text-left p-2.5 rounded-xl bg-cyanbrand-50 text-cyanbrand-800 col-span-2 flex items-center justify-center gap-2 border border-cyanbrand-200">
+                    <i class="fa-solid fa-wand-magic-sparkles text-cyanbrand-500"></i> Coba AI Virtual Stylist
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow">
+        <!-- Hero Section Cyan Dominant -->
+        <section class="relative overflow-hidden bg-gradient-to-b from-white via-cyanbrand-50/50 to-white pt-8 pb-14 lg:py-16 border-b border-cyanbrand-100">
+            <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 rounded-full bg-cyanbrand-300/30 blur-3xl pointer-events-none"></div>
+            <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-cyanbrand-400/20 blur-3xl pointer-events-none"></div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="grid lg:grid-cols-12 gap-8 items-center">
+                    
+                    <!-- Hero Content Left -->
+                    <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyanbrand-100 border border-cyanbrand-300 text-cyanbrand-900 text-xs font-extrabold tracking-wide">
+                            <span class="w-2 h-2 rounded-full bg-cyanbrand-500 animate-ping"></span>
+                            <span>CYAN & ORIENTAL FASHION 2026</span>
+                        </div>
+                        
+                        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-[1.12]">
+                            Sentuhan Cyan Harajuku & <br class="hidden sm:inline">
+                            <span class="bg-gradient-to-r from-cyanbrand-600 via-cyanbrand-500 to-cyanbrand-400 bg-clip-text text-transparent">Gaya K-Fashion 2026</span>
+                        </h1>
+                        
+                        <p class="text-slate-600 text-sm sm:text-base max-w-2xl mx-auto lg:mx-0 font-medium leading-relaxed">
+                            Marketplace fashion masa depan dengan nuansa <strong class="text-slate-900">Bright Cyan & White</strong>. Jelajahi busana kurasi eksklusif karya <span class="text-cyanbrand-600 font-bold">Int1omlen desainer</span> dan brand terkemuka Jepang & Korea.
+                        </p>
+
+                        <!-- Call To Action Buttons -->
+                        <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3.5 pt-2">
+                            <button @click="setActiveStyle('Japanese Style')" class="w-full sm:w-auto px-7 py-4 bg-cyanbrand-500 hover:bg-cyanbrand-600 text-white font-extrabold text-xs rounded-2xl shadow-cyan-glow hover:shadow-cyan-glow-lg transform hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center gap-2">
+                                <span>⛩️ Eksplor Style Jepang</span>
+                                <i class="fa-solid fa-arrow-right text-xs"></i>
+                            </button>
+                            
+                            <button @click="setActiveStyle('Korean Style')" class="w-full sm:w-auto px-7 py-4 glass-cyan text-slate-900 font-extrabold text-xs rounded-2xl hover:bg-white hover:border-cyanbrand-300 shadow-sm transition-all flex items-center justify-center gap-2">
+                                <span>🇰🇷 Eksplor Style Korea</span>
+                            </button>
+                        </div>
+
+                        <!-- Highlights Ticker -->
+                        <div class="pt-6 border-t border-cyanbrand-100 grid grid-cols-3 gap-2 text-slate-600 text-xs font-bold">
+                            <div class="flex items-center gap-2 justify-center lg:justify-start">
+                                <i class="fa-solid fa-gem text-cyanbrand-500 text-base"></i>
+                                <span>100% Original Brand</span>
+                            </div>
+                            <div class="flex items-center gap-2 justify-center lg:justify-start">
+                                <i class="fa-solid fa-shirt text-cyanbrand-500 text-base"></i>
+                                <span>By Int1omlen</span>
+                            </div>
+                            <div class="flex items-center gap-2 justify-center lg:justify-start">
+                                <i class="fa-solid fa-wand-magic-sparkles text-cyanbrand-500 text-base"></i>
+                                <span>AI Outfit Matcher</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hero Visual Right -->
+                    <div class="lg:col-span-5 relative">
+                        <div class="relative mx-auto max-w-md lg:max-w-none">
+                            <div class="relative rounded-3xl overflow-hidden shadow-cyan-glow border-4 border-white">
+                                <img src="https://images.unsplash.com/photo-1544441893-675973e31985?w=1000&q=80" alt="Harajuku Cyber Jacket FyF 2026" class="w-full h-[420px] sm:h-[480px] object-cover object-top hover:scale-105 transition-transform duration-700">
+                                
+                                <div class="absolute inset-0 bg-gradient-to-t from-cyanbrand-900/90 via-cyanbrand-950/20 to-transparent flex flex-col justify-end p-6 text-white">
+                                    <div class="flex items-center gap-2 mb-1">
+                                        <span class="bg-cyanbrand-400 text-slate-950 text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-md">Harajuku Cyber</span>
+                                        <span class="bg-white text-cyanbrand-800 text-[10px] font-extrabold px-2 py-0.5 rounded-md">By Int1omlen</span>
+                                    </div>
+                                    <h3 class="text-xl font-extrabold">Harajuku Neon Cyan Cyber-Jacket</h3>
+                                    <p class="text-xs text-cyanbrand-100 mt-0.5">Edisi Spesial Style Jepang 2026</p>
+                                </div>
+                            </div>
+
+                            <!-- Floating Glass Badge 1 -->
+                            <div class="absolute -bottom-5 -left-5 glass-cyan p-3.5 rounded-2xl shadow-xl flex items-center gap-3 animate-bounce hidden sm:flex border border-cyanbrand-200">
+                                <div class="w-10 h-10 rounded-xl bg-cyan-gradient text-white flex items-center justify-center font-bold">
+                                    <i class="fa-solid fa-certificate text-white"></i>
+                                </div>
+                                <div>
+                                    <p class="text-xs font-black text-slate-900">Curated by Int1omlen</p>
+                                    <p class="text-[10px] text-cyanbrand-700 font-bold">Desainer Terverifikasi FyF 2026</p>
+                                </div>
+                            </div>
+
+                            <!-- Floating Glass Badge 2 -->
+                            <div class="absolute -top-4 -right-4 glass-cyan p-3 rounded-2xl shadow-lg border border-cyanbrand-300 hidden sm:block">
+                                <div class="flex items-center gap-2 text-cyanbrand-800 font-black text-xs">
+                                    <span>⛩️ Japanese & 🇰🇷 Korean Fit</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Flash Sale Banner Section 2026 Cyan -->
+        <section id="flash-sale" class="py-7 bg-cyan-gradient text-white relative overflow-hidden shadow-md">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                    
+                    <div class="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
+                        <div class="w-12 h-12 rounded-2xl bg-white/20 border border-white/40 flex items-center justify-center text-white text-2xl animate-pulse shadow-inner">
+                            <i class="fa-solid fa-bolt"></i>
+                        </div>
+                        <div>
+                            <div class="flex items-center justify-center sm:justify-start gap-2">
+                                <h2 class="text-xl font-black tracking-tight text-white">CYAN ORIENTAL & K-STYLE FLASH SALE</h2>
+                                <span class="bg-white text-cyanbrand-800 text-[10px] font-black px-2 py-0.5 rounded-md uppercase">Diskon 45%</span>
+                            </div>
+                            <p class="text-cyanbrand-100 text-xs mt-0.5">Penawaran terbatas untuk koleksi style Jepang, Korea & Techwear</p>
+                        </div>
+                    </div>
+
+                    <!-- Countdown Timer -->
+                    <div class="flex items-center gap-3">
+                        <span class="text-xs text-cyanbrand-100 font-bold uppercase tracking-wider hidden sm:inline">Sisa Waktu:</span>
+                        <div class="flex items-center gap-1.5 font-mono text-center">
+                            <div class="bg-white/20 backdrop-blur border border-white/30 px-3 py-1.5 rounded-xl">
+                                <span class="block text-base font-bold text-white">{{ String(countdown.hours).padStart(2, '0') }}</span>
+                                <span class="text-[8px] text-cyanbrand-100 font-sans uppercase">Jam</span>
+                            </div>
+                            <span class="text-lg font-bold text-cyanbrand-200">:</span>
+                            <div class="bg-white/20 backdrop-blur border border-white/30 px-3 py-1.5 rounded-xl">
+                                <span class="block text-base font-bold text-white">{{ String(countdown.minutes).padStart(2, '0') }}</span>
+                                <span class="text-[8px] text-cyanbrand-100 font-sans uppercase">Menit</span>
+                            </div>
+                            <span class="text-lg font-bold text-cyanbrand-200">:</span>
+                            <div class="bg-white/20 backdrop-blur border border-white/30 px-3 py-1.5 rounded-xl">
+                                <span class="block text-base font-bold text-amber-300 animate-pulse">{{ String(countdown.seconds).padStart(2, '0') }}</span>
+                                <span class="text-[8px] text-cyanbrand-100 font-sans uppercase">Detik</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Catalog Section -->
+        <section id="catalog-section" class="py-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
+                <div>
+                    <h2 class="text-2xl font-black text-slate-900 tracking-tight">Katalog Fashion Cyan 2026</h2>
+                    <p class="text-xs text-slate-500 mt-0.5">Temukan gaya pakaian terkini dengan desain eksklusif dan bahan premium.</p>
+                </div>
+
+                <!-- AI Stylist Quick Trigger -->
+                <button @click="openModal('stylist')" class="px-4 py-2.5 rounded-2xl bg-cyanbrand-500 hover:bg-cyanbrand-600 text-white text-xs font-extrabold shadow-cyan-glow transition flex items-center gap-2">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    <span>Tanya AI Stylist 2026</span>
+                </button>
+            </div>
+
+            <!-- Style Chip Filter Bar -->
+            <div class="flex items-center gap-2 overflow-x-auto pb-3 scrollbar-none">
+                <button 
+                    v-for="style in styleCategories" 
+                    :key="style.name"
+                    @click="setActiveStyle(style.name)"
+                    :class="selectedStyle === style.name ? 'bg-cyanbrand-500 text-white shadow-cyan-glow' : 'bg-white text-slate-700 hover:bg-cyanbrand-50 border border-slate-200'"
+                    class="px-4 py-2.5 rounded-2xl text-xs font-extrabold whitespace-nowrap transition-all duration-200 flex items-center gap-1.5"
+                >
+                    <span>{{ style.icon }}</span>
+                    <span>{{ style.name }}</span>
+                </button>
+            </div>
+
+            <!-- Toolbar Filters & Sorting Header -->
+            <div class="flex flex-wrap items-center justify-between gap-4 mt-2 mb-6 pt-4 border-t border-cyanbrand-100">
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-bold text-slate-800">Menampilkan {{ filteredProducts.length }} Koleksi Outfit</span>
+                    <span v-if="selectedStyle !== 'Semua'" class="text-[11px] bg-cyanbrand-100 text-cyanbrand-800 px-2.5 py-0.5 rounded-full font-extrabold border border-cyanbrand-200">
+                        {{ selectedStyle }}
+                    </span>
+                </div>
+
+                <!-- Sort & Price Filter -->
+                <div class="flex items-center gap-3">
+                    <div class="hidden lg:flex items-center gap-2 text-xs font-bold text-slate-600 bg-white border border-cyanbrand-200 px-3 py-1.5 rounded-xl">
+                        <span>Max Harga:</span>
+                        <span class="text-cyanbrand-600 font-extrabold">{{ formatRupiah(maxPriceFilter) }}</span>
+                        <input type="range" min="300000" max="2000000" step="50000" v-model="maxPriceFilter" class="w-24 accent-cyanbrand-500">
+                    </div>
+
+                    <!-- Sorting Dropdown -->
+                    <div class="relative">
+                        <select v-model="selectedSort" class="appearance-none bg-white border border-cyanbrand-200 text-slate-700 text-xs font-extrabold py-2 pl-3 pr-8 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyanbrand-500 shadow-sm cursor-pointer">
+                            <option value="default">Urutkan: Rekomendasi 2026</option>
+                            <option value="price-low">Harga: Terendah ke Tertinggi</option>
+                            <option value="price-high">Harga: Tertinggi ke Terendah</option>
+                            <option value="rating">Rating Tertinggi</option>
+                        </select>
+                        <i class="fa-solid fa-chevron-down absolute right-3 top-2.5 text-cyanbrand-500 text-xs pointer-events-none"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Empty State -->
+            <div v-if="filteredProducts.length === 0" class="py-16 text-center bg-white rounded-3xl border border-cyanbrand-100 p-8 shadow-sm">
+                <div class="w-16 h-16 bg-cyanbrand-50 text-cyanbrand-500 rounded-full flex items-center justify-center mx-auto text-2xl mb-4">
+                    <i class="fa-solid fa-shirt"></i>
+                </div>
+                <h3 class="text-base font-bold text-slate-800">Tidak ada item fashion ditemukan</h3>
+                <p class="text-xs text-slate-500 mt-1 max-w-sm mx-auto">Coba bersihkan filter pencarian atau naikkan batas harga maksimal Anda.</p>
+                <button @click="resetFilters" class="mt-4 px-5 py-2.5 bg-cyanbrand-500 text-white font-bold text-xs rounded-xl hover:bg-cyanbrand-600 transition shadow-cyan-glow">
+                    Reset Semua Filter
+                </button>
+            </div>
+
+            <!-- Product Cards Grid View -->
+            <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <div 
+                    v-for="product in filteredProducts" 
+                    :key="product.id"
+                    class="group bg-white rounded-2xl border border-slate-200 hover:border-cyanbrand-400 overflow-hidden hover:shadow-cyan-glow transition-all duration-300 flex flex-col justify-between"
+                >
+                    <div>
+                        <!-- Image Container -->
+                        <div class="relative aspect-[3/4] overflow-hidden bg-slate-100 cursor-pointer" @click="openQuickView(product)">
+                            <img 
+                                :src="product.image" 
+                                :alt="product.name" 
+                                class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                            >
+                            
+                            <!-- Badges -->
+                            <div class="absolute top-3 left-3 flex flex-col gap-1 items-start z-10">
+                                <span v-if="product.styleBadge" class="bg-slate-900/90 backdrop-blur text-cyanbrand-300 text-[10px] font-black px-2.5 py-1 rounded-md tracking-wider shadow-sm flex items-center gap-1 border border-cyanbrand-500/30">
+                                    <span>{{ product.styleIcon }}</span>
+                                    <span>{{ product.styleBadge }}</span>
+                                </span>
+                                <span v-if="product.designer" class="bg-cyanbrand-500 text-white text-[9px] font-extrabold px-2 py-0.5 rounded-md shadow-sm">
+                                    By Int1omlen
+                                </span>
+                            </div>
+
+                            <!-- Wishlist Button -->
+                            <button 
+                                @click.stop="toggleWishlist(product.id)" 
+                                class="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/90 backdrop-blur text-slate-600 hover:text-rose-500 flex items-center justify-center shadow-md transition transform active:scale-90 z-10"
+                                :class="{'text-rose-500 bg-white': isWishlisted(product.id)}"
+                            >
+                                <i :class="isWishlisted(product.id) ? 'fa-solid fa-heart' : 'fa-regular fa-heart'" class="text-base"></i>
+                            </button>
+
+                            <!-- Quick View Hover Overlay -->
+                            <div class="absolute inset-x-3 bottom-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden sm:block">
+                                <button @click.stop="openQuickView(product)" class="w-full py-2 bg-slate-950/80 hover:bg-slate-950 text-white backdrop-blur text-xs font-bold rounded-xl shadow-lg transition border border-cyanbrand-400/40">
+                                    <i class="fa-regular fa-eye mr-1.5 text-cyanbrand-400"></i> Quick View 2026
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Product Info -->
+                        <div class="p-4 space-y-2">
+                            <div class="flex items-center justify-between text-[11px] text-slate-400 font-bold">
+                                <span>{{ product.gender }} • {{ product.style }}</span>
+                                <span class="flex items-center text-amber-500 font-extrabold">
+                                    <i class="fa-solid fa-star text-[10px] mr-1"></i> {{ product.rating }} ({{ product.reviews }})
+                                </span>
+                            </div>
+
+                            <h3 @click="openQuickView(product)" class="font-bold text-slate-900 text-sm hover:text-cyanbrand-600 cursor-pointer line-clamp-2 leading-snug transition">
+                                {{ product.name }}
+                            </h3>
+
+                            <!-- Available Sizes -->
+                            <div class="flex items-center gap-1 text-[10px] font-extrabold text-slate-400">
+                                <span>UKURAN:</span>
+                                <span v-for="sz in product.sizes" :key="sz" class="px-1.5 py-0.5 bg-cyanbrand-50 text-cyanbrand-800 rounded border border-cyanbrand-200">
+                                    {{ sz }}
+                                </span>
+                            </div>
+
+                            <!-- Pricing -->
+                            <div class="pt-1 flex items-baseline gap-2">
+                                <span class="text-base font-black text-cyanbrand-600">
+                                    {{ formatRupiah(product.price) }}
+                                </span>
+                                <span v-if="product.originalPrice" class="text-xs text-slate-400 line-through font-semibold">
+                                    {{ formatRupiah(product.originalPrice) }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cart Action -->
+                    <div class="p-4 pt-0">
+                        <button 
+                            @click="addToCart(product)" 
+                            class="w-full py-2.5 bg-cyanbrand-50 hover:bg-cyanbrand-500 hover:text-white text-cyanbrand-800 font-bold text-xs rounded-xl flex items-center justify-center gap-2 transition duration-200 border border-cyanbrand-200"
+                        >
+                            <i class="fa-solid fa-plus text-xs"></i>
+                            <span>Tambah Ke Bag</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- AI Virtual Stylist Modal -->
+        <div v-if="activeModal === 'stylist'" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md">
+            <div class="bg-white rounded-3xl max-w-xl w-full p-6 relative shadow-cyan-glow border border-cyanbrand-200 overflow-hidden">
+                <button @click="closeModal" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 rounded-2xl bg-cyan-gradient text-white flex items-center justify-center text-lg shadow-cyan-glow">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-black text-slate-900">AI Virtual Stylist Cyan 2026</h3>
+                        <p class="text-xs text-slate-500">Pilih rekomendasi look & outfit yang cocok dengan vibe Anda</p>
+                    </div>
+                </div>
+
+                <!-- Mood Selector -->
+                <div class="space-y-3">
+                    <label class="text-xs font-extrabold text-slate-700">Pilih Aesthetics & Vibe Anda Hari Ini:</label>
+                    <div class="grid grid-cols-2 gap-2 text-xs font-bold">
+                        <button 
+                            v-for="vibe in stylistVibes" 
+                            :key="vibe.id"
+                            @click="selectedVibe = vibe.id"
+                            :class="selectedVibe === vibe.id ? 'bg-cyanbrand-500 text-white border-cyanbrand-500 shadow-cyan-glow' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'"
+                            class="p-3 rounded-2xl border text-left flex items-center justify-between transition"
+                        >
+                            <span>{{ vibe.label }}</span>
+                            <i class="fa-solid fa-chevron-right text-[10px] opacity-70"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Stylist Recommendation Results -->
+                <div class="mt-6 pt-4 border-t border-slate-100">
+                    <div class="text-xs font-extrabold text-slate-800 mb-2">Rekomendasi Outfit Untuk Vibe Ini:</div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div v-for="rec in getStylistRecommendations()" :key="rec.id" class="flex gap-2.5 p-2 bg-cyanbrand-50/60 rounded-xl border border-cyanbrand-100 items-center">
+                            <img :src="rec.image" class="w-12 h-14 object-cover rounded-lg border border-cyanbrand-200">
+                            <div class="min-w-0 flex-1">
+                                <h4 class="text-[11px] font-bold text-slate-800 truncate">{{ rec.name }}</h4>
+                                <p class="text-[10px] font-extrabold text-cyanbrand-600">{{ formatRupiah(rec.price) }}</p>
+                                <button @click="addToCart(rec); closeModal()" class="mt-1 text-[9px] bg-cyanbrand-500 text-white font-bold px-2 py-0.5 rounded shadow-sm">
+                                    + Ambil Outfit
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Int1omlen Desainer Profile Modal -->
+        <div v-if="activeModal === 'profile'" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md">
+            <div class="bg-white rounded-3xl max-w-2xl w-full p-6 relative shadow-cyan-glow border border-cyanbrand-200 max-h-[90vh] overflow-y-auto">
+                <button @click="closeModal" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+
+                <!-- Profile Header -->
+                <div class="flex flex-col sm:flex-row items-center gap-5 pb-6 border-b border-cyanbrand-100 text-center sm:text-left">
+                    <div class="relative">
+                        <div class="w-20 h-20 rounded-full bg-cyan-gradient p-1 shadow-cyan-glow">
+                            <div class="w-full h-full rounded-full bg-slate-900 text-white flex items-center justify-center font-black text-2xl border-2 border-white">
+                                ID
+                            </div>
+                        </div>
+                        <span class="absolute bottom-0 right-0 w-6 h-6 bg-cyanbrand-400 border-2 border-white rounded-full flex items-center justify-center text-slate-950 text-[10px] font-bold" title="Online Designer">
+                            <i class="fa-solid fa-check"></i>
+                        </span>
+                    </div>
+
+                    <div class="space-y-1 flex-1">
+                        <div class="flex items-center justify-center sm:justify-start gap-2">
+                            <h2 class="text-xl font-black text-slate-900">Int1omlen desainer</h2>
+                            <span class="bg-cyanbrand-100 text-cyanbrand-800 text-[10px] font-black px-2.5 py-0.5 rounded-full border border-cyanbrand-300 flex items-center gap-1">
+                                <i class="fa-solid fa-badge-check text-cyanbrand-600"></i> Verified 2026
+                            </span>
+                        </div>
+                        <p class="text-xs text-slate-500 font-medium">Spesialis Cyber Harajuku Cyan & K-Fashion Techwear Outerwear</p>
+                        <p class="text-[11px] text-cyanbrand-700 font-semibold">Jakarta / Tokyo Studio • Member sejak 2024</p>
+                    </div>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="grid grid-cols-4 gap-3 py-4 text-center border-b border-cyanbrand-100">
+                    <div class="bg-cyanbrand-50 p-2.5 rounded-2xl border border-cyanbrand-100">
+                        <span class="block text-base font-black text-cyanbrand-600">{{ products.filter(p => p.designer).length }}</span>
+                        <span class="text-[10px] text-slate-500 font-bold uppercase">Koleksi</span>
+                    </div>
+                    <div class="bg-cyanbrand-50 p-2.5 rounded-2xl border border-cyanbrand-100">
+                        <span class="block text-base font-black text-amber-500">4.9 ★</span>
+                        <span class="text-[10px] text-slate-500 font-bold uppercase">Rating</span>
+                    </div>
+                    <div class="bg-cyanbrand-50 p-2.5 rounded-2xl border border-cyanbrand-100">
+                        <span class="block text-base font-black text-slate-800">12.8K</span>
+                        <span class="text-[10px] text-slate-500 font-bold uppercase">Pengikut</span>
+                    </div>
+                    <div class="bg-cyanbrand-50 p-2.5 rounded-2xl border border-cyanbrand-100">
+                        <span class="block text-base font-black text-emerald-600">2.4K</span>
+                        <span class="text-[10px] text-slate-500 font-bold uppercase">Terjual</span>
+                    </div>
+                </div>
+
+                <!-- Designer Tab Content -->
+                <div class="pt-4 space-y-4">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-xs font-extrabold text-slate-800 uppercase tracking-wider">Koleksi Desain Oleh Int1omlen</h3>
+                        <button @click="openModal('upload')" class="px-3.5 py-2 bg-cyanbrand-500 hover:bg-cyanbrand-600 text-white rounded-xl text-xs font-bold transition shadow-cyan-glow flex items-center gap-1.5">
+                            <i class="fa-solid fa-plus"></i>
+                            <span>Upload Desain Baru</span>
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        <div v-for="item in products.filter(p => p.designer)" :key="item.id" class="p-2 border border-cyanbrand-100 rounded-xl flex items-center gap-2.5 bg-cyanbrand-50/40">
+                            <img :src="item.image" class="w-10 h-12 object-cover rounded-lg border border-cyanbrand-200">
+                            <div class="min-w-0">
+                                <h4 class="text-xs font-bold text-slate-800 truncate">{{ item.name }}</h4>
+                                <p class="text-[11px] font-extrabold text-cyanbrand-600">{{ formatRupiah(item.price) }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Upload New Design Modal -->
+        <div v-if="activeModal === 'upload'" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md">
+            <div class="bg-white rounded-3xl max-w-lg w-full p-6 relative shadow-cyan-glow border border-cyanbrand-200 max-h-[90vh] overflow-y-auto">
+                <button @click="openModal('profile')" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 rounded-2xl bg-cyan-gradient text-white flex items-center justify-center text-lg shadow-cyan-glow">
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-black text-slate-900">Rilis Desain Baru 2026</h3>
+                        <p class="text-xs text-slate-500">Upload karya terbaru Int1omlen desainer ke catalog FyF</p>
+                    </div>
+                </div>
+
+                <form @submit.prevent="submitNewDesign" class="space-y-3 text-xs">
+                    <div>
+                        <label class="block font-extrabold text-slate-700 mb-1">Nama Pakaian / Outfit</label>
+                        <input v-model="newDesignForm.name" type="text" placeholder="misal: Shibuya Cyan Windbreaker Jacket" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyanbrand-500 outline-none">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block font-extrabold text-slate-700 mb-1">Kategori Style</label>
+                            <select v-model="newDesignForm.style" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyanbrand-500 outline-none font-bold">
+                                <option value="Japanese Style">Japanese Style</option>
+                                <option value="Korean Style">Korean Style</option>
+                                <option value="2026 Techwear">2026 Techwear</option>
+                                <option value="Minimalist Streetwear">Minimalist Streetwear</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block font-extrabold text-slate-700 mb-1">Harga (IDR)</label>
+                            <input v-model.number="newDesignForm.price" type="number" placeholder="850000" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyanbrand-500 outline-none">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block font-extrabold text-slate-700 mb-1">URL Gambar Pakaian</label>
+                        <input v-model="newDesignForm.image" type="url" placeholder="https://images.unsplash.com/..." required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyanbrand-500 outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block font-extrabold text-slate-700 mb-1">Deskripsi Desain</label>
+                        <textarea v-model="newDesignForm.description" rows="3" placeholder="Jelaskan karakteristik, bahan, dan aksen warna cyan outfit..." required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyanbrand-500 outline-none"></textarea>
+                    </div>
+
+                    <div class="pt-3 border-t border-slate-100 flex justify-end gap-2">
+                        <button type="button" @click="openModal('profile')" class="px-4 py-2.5 bg-slate-100 text-slate-700 font-bold rounded-xl hover:bg-slate-200">
+                            Batal
+                        </button>
+                        <button type="submit" class="px-5 py-2.5 bg-cyanbrand-500 hover:bg-cyanbrand-600 text-white font-extrabold rounded-xl shadow-cyan-glow transition">
+                            Publikasikan Desain 🚀
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Quick View Modal -->
+        <div v-if="activeModal === 'quickview' && selectedProduct" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md">
+            <div class="bg-white rounded-3xl max-w-2xl w-full overflow-hidden shadow-cyan-glow border border-cyanbrand-200 relative max-h-[90vh] overflow-y-auto">
+                <button @click="closeModal" class="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+
+                <div class="grid sm:grid-cols-2 gap-6 p-6">
+                    <!-- Image -->
+                    <div class="space-y-3">
+                        <div class="aspect-[3/4] rounded-2xl overflow-hidden bg-slate-100 border border-cyanbrand-100">
+                            <img :src="selectedProduct.image" :alt="selectedProduct.name" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+
+                    <!-- Details -->
+                    <div class="flex flex-col justify-between space-y-4">
+                        <div class="space-y-3">
+                            <div class="flex items-center gap-2">
+                                <span class="bg-cyanbrand-900 text-cyanbrand-200 text-[10px] font-black px-2.5 py-0.5 rounded-full uppercase">
+                                    {{ selectedProduct.style }}
+                                </span>
+                                <span v-if="selectedProduct.designer" class="bg-cyanbrand-100 text-cyanbrand-800 text-[10px] font-bold px-2 py-0.5 rounded-full border border-cyanbrand-200">
+                                    By Int1omlen
+                                </span>
+                            </div>
+
+                            <h2 class="text-xl font-black text-slate-900">{{ selectedProduct.name }}</h2>
+
+                            <div class="flex items-center gap-2 text-xs">
+                                <span class="text-amber-500 font-extrabold flex items-center gap-1">
+                                    <i class="fa-solid fa-star"></i> {{ selectedProduct.rating }}
+                                </span>
+                                <span class="text-slate-400">({{ selectedProduct.reviews }} ulasan pembeli)</span>
+                            </div>
+
+                            <div class="flex items-baseline gap-2">
+                                <span class="text-2xl font-black text-cyanbrand-600">{{ formatRupiah(selectedProduct.price) }}</span>
+                                <span v-if="selectedProduct.originalPrice" class="text-xs text-slate-400 line-through font-semibold">
+                                    {{ formatRupiah(selectedProduct.originalPrice) }}
+                                </span>
+                            </div>
+
+                            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+                                {{ selectedProduct.description }}
+                            </p>
+
+                            <!-- Size Choice -->
+                            <div class="space-y-1.5 pt-2">
+                                <label class="block text-xs font-bold text-slate-700">Pilih Ukuran (Cyan Fit 2026):</label>
+                                <div class="flex gap-2">
+                                    <button 
+                                        v-for="size in selectedProduct.sizes" 
+                                        :key="size"
+                                        @click="quickViewSize = size"
+                                        :class="quickViewSize === size ? 'bg-cyanbrand-500 text-white font-bold border-cyanbrand-500 shadow-cyan-glow' : 'bg-white text-slate-700 border-slate-200 hover:border-cyanbrand-300'"
+                                        class="w-10 h-10 rounded-xl border text-xs flex items-center justify-center transition"
+                                    >
+                                        {{ size }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CTA inside Modal -->
+                        <div class="pt-4 border-t border-slate-100 flex gap-3">
+                            <button @click="addToCartFromQuickView" class="flex-1 py-3.5 bg-cyanbrand-500 hover:bg-cyanbrand-600 text-white font-extrabold text-xs rounded-2xl shadow-cyan-glow transition">
+                                <i class="fa-solid fa-cart-plus mr-1"></i> Tambah Ke Bag
+                            </button>
+                            <button @click="toggleWishlist(selectedProduct.id)" class="px-4 py-3 border border-slate-200 rounded-2xl hover:bg-slate-50 transition">
+                                <i :class="isWishlisted(selectedProduct.id) ? 'fa-solid fa-heart text-rose-500' : 'fa-regular fa-heart text-slate-600'"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cart Drawer Modal -->
+        <div v-if="activeModal === 'cart'" class="fixed inset-0 z-50 overflow-hidden">
+            <div @click="closeModal" class="absolute inset-0 bg-slate-950/60 backdrop-blur-xs transition-opacity"></div>
+            <div class="fixed inset-y-0 right-0 max-w-full flex pl-10">
+                <div class="w-screen max-w-md bg-white shadow-2xl flex flex-col justify-between">
+                    
+                    <!-- Header -->
+                    <div class="p-5 border-b border-cyanbrand-100 flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-bag-shopping text-cyanbrand-600 text-lg"></i>
+                            <h2 class="text-base font-bold text-slate-800">Keranjang Belanja</h2>
+                            <span class="bg-cyanbrand-100 text-cyanbrand-800 text-xs font-bold px-2 py-0.5 rounded-full border border-cyanbrand-200">
+                                {{ cartTotalCount }} Item
+                            </span>
+                        </div>
+                        <button @click="closeModal" class="text-slate-400 hover:text-slate-600 p-1">
+                            <i class="fa-solid fa-xmark text-lg"></i>
+                        </button>
+                    </div>
+
+                    <!-- Cart Item List -->
+                    <div class="flex-1 overflow-y-auto p-5 space-y-4">
+                        <div v-if="cart.length === 0" class="text-center py-12 space-y-3">
+                            <i class="fa-solid fa-basket-shopping text-4xl text-cyanbrand-200"></i>
+                            <p class="text-sm font-bold text-slate-600">Keranjang belanja Anda kosong</p>
+                            <p class="text-xs text-slate-400">Jelajahi koleksi Jepang & Korea Cyan pilihan Anda!</p>
+                            <button @click="closeModal" class="mt-2 px-4 py-2 bg-cyanbrand-500 text-white font-bold text-xs rounded-xl shadow-cyan-glow">Mulai Belanja</button>
+                        </div>
+
+                        <div v-for="(item, index) in cart" :key="index" class="flex gap-3 p-3 bg-cyanbrand-50/50 rounded-2xl border border-cyanbrand-100 relative">
+                            <img :src="item.product.image" :alt="item.product.name" class="w-16 h-20 object-cover rounded-xl bg-white border border-cyanbrand-100">
+                            
+                            <div class="flex-1 flex flex-col justify-between">
+                                <div>
+                                    <h4 class="text-xs font-bold text-slate-800 line-clamp-1">{{ item.product.name }}</h4>
+                                    <div class="text-[10px] text-slate-500 font-semibold mt-0.5">
+                                        Ukuran: <span class="text-cyanbrand-600 font-bold">{{ item.size }}</span>
+                                    </div>
+                                    <div class="text-xs font-black text-cyanbrand-700 mt-1">
+                                        {{ formatRupiah(item.product.price) }}
+                                    </div>
+                                </div>
+
+                                <!-- Quantity -->
+                                <div class="flex items-center gap-2">
+                                    <button @click="updateCartQty(index, -1)" class="w-6 h-6 rounded-lg bg-white border border-slate-200 text-xs font-bold flex items-center justify-center hover:bg-slate-100">-</button>
+                                    <span class="text-xs font-bold text-slate-800">{{ item.quantity }}</span>
+                                    <button @click="updateCartQty(index, 1)" class="w-6 h-6 rounded-lg bg-white border border-slate-200 text-xs font-bold flex items-center justify-center hover:bg-slate-100">+</button>
+                                </div>
+                            </div>
+
+                            <button @click="removeFromCart(index)" class="text-slate-400 hover:text-rose-500 text-xs p-1">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Footer Summary -->
+                    <div v-if="cart.length > 0" class="p-5 border-t border-cyanbrand-100 bg-slate-50/80 space-y-3">
+                        <div class="flex gap-2">
+                            <input 
+                                type="text" 
+                                v-model="promoInput" 
+                                placeholder="Kode Promo (FYFCYAN2026)" 
+                                class="flex-1 px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs uppercase font-bold focus:outline-none focus:ring-2 focus:ring-cyanbrand-500"
+                            >
+                            <button @click="applyPromo" class="px-4 py-2 bg-slate-900 text-white font-bold text-xs rounded-xl hover:bg-slate-800 transition">
+                                Terapkan
+                            </button>
+                        </div>
+
+                        <div class="space-y-1.5 text-xs text-slate-600">
+                            <div class="flex justify-between">
+                                <span>Subtotal</span>
+                                <span class="font-bold text-slate-800">{{ formatRupiah(cartSubtotal) }}</span>
+                            </div>
+                            <div v-if="appliedDiscount > 0" class="flex justify-between text-emerald-600 font-semibold">
+                                <span>Diskon Promo ({{ appliedDiscount }}%)</span>
+                                <span>- {{ formatRupiah(discountAmount) }}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Pengiriman (Cyan Express)</span>
+                                <span class="text-emerald-600 font-bold">GRATIS</span>
+                            </div>
+                            <div class="flex justify-between text-sm font-black text-slate-900 pt-2 border-t border-slate-200">
+                                <span>Total Pembayaran</span>
+                                <span class="text-cyanbrand-600">{{ formatRupiah(cartFinalTotal) }}</span>
+                            </div>
+                        </div>
+
+                        <button @click="startCheckout" class="w-full py-3.5 bg-cyanbrand-500 hover:bg-cyanbrand-600 text-white font-extrabold text-xs rounded-2xl shadow-cyan-glow transition flex items-center justify-center gap-2">
+                            <span>Lanjut ke Checkout</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Checkout Modal -->
+        <div v-if="activeModal === 'checkout'" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md">
+            <div class="bg-white rounded-3xl max-w-lg w-full overflow-hidden shadow-cyan-glow p-6 relative border border-cyanbrand-200">
+                
+                <button @click="closeModal" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+
+                <!-- Order Success View -->
+                <div v-if="checkoutStep === 2" class="text-center py-6 space-y-4">
+                    <div class="w-16 h-16 bg-cyanbrand-100 text-cyanbrand-600 rounded-full flex items-center justify-center mx-auto text-3xl animate-bounce border border-cyanbrand-300">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                    <h3 class="text-xl font-black text-slate-900">Pesanan Diterima!</h3>
+                    <p class="text-xs text-slate-500 max-w-xs mx-auto">
+                        Nomor Pesanan: <strong class="text-cyanbrand-600 font-mono">#{{ orderId }}</strong>. Pakaian kurasi pilihan Anda segera disiapkan.
+                    </p>
+
+                    <div class="bg-cyanbrand-50/50 p-4 rounded-2xl text-left text-xs space-y-2 border border-cyanbrand-100">
+                        <div class="flex justify-between">
+                            <span class="text-slate-500">Pemesan:</span>
+                            <span class="font-bold text-slate-800">{{ checkoutForm.name }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-500">Metode Pembayaran:</span>
+                            <span class="font-bold text-slate-800 uppercase">{{ checkoutForm.payment }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-500">Total Pembayaran:</span>
+                            <span class="font-bold text-cyanbrand-600">{{ formatRupiah(cartFinalTotal) }}</span>
+                        </div>
+                    </div>
+
+                    <button @click="finishCheckout" class="w-full py-3 bg-cyanbrand-500 hover:bg-cyanbrand-600 text-white font-extrabold text-xs rounded-xl shadow-cyan-glow">
+                        Selesai & Kembali Belanja
+                    </button>
+                </div>
+
+                <!-- Form View -->
+                <div v-else class="space-y-4">
+                    <h3 class="text-lg font-black text-slate-900 flex items-center gap-2">
+                        <i class="fa-solid fa-credit-card text-cyanbrand-500"></i> Checkout FyF Cyan 2026
+                    </h3>
+
+                    <div class="space-y-3 text-xs">
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">Nama Pembeli</label>
+                            <input v-model="checkoutForm.name" type="text" class="w-full px-3 py-2 border rounded-xl focus:ring-2 focus:ring-cyanbrand-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">Alamat Pengiriman</label>
+                            <textarea v-model="checkoutForm.address" rows="2" class="w-full px-3 py-2 border rounded-xl focus:ring-2 focus:ring-cyanbrand-500 outline-none"></textarea>
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">Metode Pembayaran</label>
+                            <select v-model="checkoutForm.payment" class="w-full px-3 py-2 border rounded-xl focus:ring-2 focus:ring-cyanbrand-500 outline-none font-bold">
+                                <option value="qris">QRIS Cyan Instan (BCA, GoPay, OVO, ShopeePay)</option>
+                                <option value="va">Virtual Account Bank Mandiri / BCA</option>
+                                <option value="paylater">FyF Cyan PayLater 2026 (0% Bunga)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="pt-3 border-t flex justify-between items-center">
+                        <div>
+                            <span class="text-[11px] text-slate-400">Total Tagihan:</span>
+                            <div class="text-base font-black text-cyanbrand-600">{{ formatRupiah(cartFinalTotal) }}</div>
+                        </div>
+                        <button @click="processPayment" class="px-6 py-3 bg-cyanbrand-500 hover:bg-cyanbrand-600 text-white font-extrabold text-xs rounded-xl shadow-cyan-glow">
+                            Bayar Pesanan 🚀
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Wishlist Modal -->
+        <div v-if="activeModal === 'wishlist'" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md">
+            <div class="bg-white rounded-3xl max-w-md w-full overflow-hidden shadow-cyan-glow p-6 relative max-h-[80vh] flex flex-col border border-cyanbrand-200">
+                <button @click="closeModal" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+
+                <h3 class="text-base font-extrabold text-slate-900 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-heart text-rose-500"></i> Wishlist Pilihan Anda
+                </h3>
+
+                <div class="flex-1 overflow-y-auto space-y-3">
+                    <div v-if="wishlist.length === 0" class="text-center py-8 text-xs text-slate-400">
+                        Belum ada item favorit disimpan.
+                    </div>
+
+                    <div v-for="id in wishlist" :key="id" class="flex items-center gap-3 p-2 border border-slate-100 rounded-xl">
+                        <img :src="getProductById(id)?.image" class="w-12 h-14 object-cover rounded-lg border border-cyanbrand-100">
+                        <div class="flex-1 min-w-0">
+                            <h4 class="text-xs font-bold text-slate-800 truncate">{{ getProductById(id)?.name }}</h4>
+                            <p class="text-xs text-cyanbrand-600 font-bold">{{ formatRupiah(getProductById(id)?.price || 0) }}</p>
+                        </div>
+                        <button @click="addToCart(getProductById(id))" class="p-2 bg-cyanbrand-50 text-cyanbrand-600 rounded-lg text-xs font-bold">
+                            <i class="fa-solid fa-cart-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast Notification System -->
+        <div v-if="toast.show" class="fixed bottom-6 right-6 z-50 flex items-center gap-3 bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-cyan-glow border border-cyanbrand-500/40 animate-bounce">
+            <i class="fa-solid fa-circle-check text-cyanbrand-400"></i>
+            <span class="text-xs font-semibold">{{ toast.message }}</span>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-950 text-white border-t border-cyanbrand-900 pt-12 pb-8 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 pb-10 border-b border-slate-800">
+                
+                <div class="lg:col-span-2 space-y-4">
+                    <div class="flex items-center gap-2">
+                        <div class="w-9 h-9 rounded-xl bg-cyan-gradient flex items-center justify-center font-bold text-white shadow-cyan-glow">
+                            <i class="fa-solid fa-shirt"></i>
+                        </div>
+                        <span class="font-black text-2xl tracking-tight text-white">FyF</span>
+                        <span class="text-xs text-cyanbrand-400 font-bold">Find your Fashion Cyan 2026</span>
+                    </div>
+                    <p class="text-xs text-slate-400 max-w-sm leading-relaxed">
+                        Pusat marketplace fashion modern 2026 bertema Cyan & White. Menghadirkan tren Harajuku, K-Fashion, Cyber Techwear, dan karya kurasi dari <strong class="text-cyanbrand-300">Int1omlen desainer</strong>.
+                    </p>
+                </div>
+
+                <div class="space-y-3">
+                    <h4 class="text-xs font-black text-cyanbrand-300 uppercase tracking-wider">Style Pilihan</h4>
+                    <ul class="space-y-2 text-xs text-slate-400">
+                        <li><a href="#" @click.prevent="setActiveStyle('Japanese Style')" class="hover:text-cyanbrand-300 transition">⛩️ Japanese Style</a></li>
+                        <li><a href="#" @click.prevent="setActiveStyle('Korean Style')" class="hover:text-cyanbrand-300 transition">🇰🇷 Korean Style</a></li>
+                        <li><a href="#" @click.prevent="setActiveStyle('2026 Techwear')" class="hover:text-cyanbrand-300 transition">⚡ Cyber Techwear</a></li>
+                    </ul>
+                </div>
+
+                <div class="space-y-3">
+                    <h4 class="text-xs font-black text-cyanbrand-300 uppercase tracking-wider">Desainer Partner</h4>
+                    <ul class="space-y-2 text-xs text-slate-400">
+                        <li><a href="#" @click.prevent="openModal('profile')" class="text-cyanbrand-400 font-bold hover:underline">Int1omlen desainer</a></li>
+                        <li><a href="#" class="hover:text-cyanbrand-300 transition">Tokyo Cyan Studio</a></li>
+                        <li><a href="#" class="hover:text-cyanbrand-300 transition">Seoul Atelier 2026</a></li>
+                    </ul>
+                </div>
+
+                <div class="space-y-3">
+                    <h4 class="text-xs font-black text-cyanbrand-300 uppercase tracking-wider">Metode Pembayaran</h4>
+                    <div class="flex flex-wrap gap-2 text-slate-300">
+                        <span class="bg-slate-900 px-2.5 py-1 rounded-lg text-[11px] font-bold border border-cyanbrand-900/60">QRIS</span>
+                        <span class="bg-slate-900 px-2.5 py-1 rounded-lg text-[11px] font-bold border border-cyanbrand-900/60">BCA VA</span>
+                        <span class="bg-slate-900 px-2.5 py-1 rounded-lg text-[11px] font-bold border border-cyanbrand-900/60">GoPay</span>
+                        <span class="bg-slate-900 px-2.5 py-1 rounded-lg text-[11px] font-bold border border-cyanbrand-900/60">CyanPayLater</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
+                <p>&copy; 2026 FyF (Find your Fashion) Marketplace Inc. All Rights Reserved.</p>
+                <div class="flex gap-4">
+                    <a href="#" class="hover:text-slate-400">Syarat & Ketentuan</a>
+                    <a href="#" class="hover:text-slate-400">Privasi Data</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</div>
+
+<!-- Vue 3 Application Logic -->
+<script>
+const { createApp } = Vue;
+
+createApp({
+    data() {
+        return {
+            searchQuery: '',
+            showSearchSuggest: false,
+            selectedStyle: 'Semua',
+            selectedSort: 'default',
+            maxPriceFilter: 2000000,
+            mobileMenuOpen: false,
+
+            activeModal: null, // 'cart', 'quickview', 'wishlist', 'profile', 'checkout', 'stylist', 'upload'
+            selectedProduct: null,
+            quickViewSize: 'M',
+
+            cart: [],
+            wishlist: [1, 5, 8],
+            promoInput: '',
+            appliedDiscount: 0,
+
+            checkoutStep: 1,
+            orderId: '',
+            checkoutForm: {
+                name: 'Int1omlen desainer',
+                address: 'Jl. Cyan Harajuku Future Plaza No. 2026, Jakarta & Tokyo',
+                payment: 'qris'
+            },
+
+            newDesignForm: {
+                name: '',
+                style: 'Japanese Style',
+                price: 850000,
+                image: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&q=80',
+                description: ''
+            },
+
+            selectedVibe: 'harajuku',
+            stylistVibes: [
+                { id: 'harajuku', label: '⛩️ Harajuku Cyber-Cyan' },
+                { id: 'seoul', label: '🇰🇷 Seoul Soft Aesthetic' },
+                { id: 'tokyo-chill', label: '🎌 Tokyo Minimalist' },
+                { id: 'techwear', label: '⚡ Ultra Techwear 2026' }
+            ],
+
+            countdown: {
+                hours: 5,
+                minutes: 24,
+                seconds: 12
+            },
+
+            toast: {
+                show: false,
+                message: ''
+            },
+
+            styleCategories: [
+                { name: 'Semua', icon: '✨' },
+                { name: 'Japanese Style', icon: '⛩️' },
+                { name: 'Korean Style', icon: '🇰🇷' },
+                { name: '2026 Techwear', icon: '⚡' },
+                { name: 'Minimalist Streetwear', icon: '🌿' }
+            ],
+
+            // Products dataset featuring Cyan theme, Japanese & Korean Styles + Int1omlen designs
+            products: [
+                // Japanese Fashion Styles
+                {
+                    id: 1,
+                    name: 'Harajuku Neon Cyan Cyber-Jacket',
+                    style: 'Japanese Style',
+                    styleBadge: 'Harajuku Tech',
+                    styleIcon: '⛩️',
+                    gender: 'Uniseks',
+                    price: 1450000,
+                    originalPrice: 1850000,
+                    rating: 4.96,
+                    reviews: 192,
+                    designer: true,
+                    sizes: ['S', 'M', 'L', 'XL'],
+                    description: 'Jaket cyber Harajuku 2026 berbahan waterproof aero-shell dengan aksen garis Cyan neon reflektif dan saku modular.',
+                    image: 'https://images.unsplash.com/photo-1544441893-675973e31985?w=800&q=80'
+                },
+                {
+                    id: 2,
+                    name: 'Shibuya Oversized Cyan Cyberpunk Hoodie',
+                    style: 'Japanese Style',
+                    styleBadge: 'Shibuya Look',
+                    styleIcon: '⛩️',
+                    gender: 'Uniseks',
+                    price: 780000,
+                    originalPrice: 950000,
+                    rating: 4.89,
+                    reviews: 128,
+                    designer: false,
+                    sizes: ['M', 'L', 'XL', 'XXL'],
+                    description: 'Hoodie oversized khas Shibuya Streetwear 2026 berbahan katun fabelo tebal yang nyaman dengan sentuhan Cyan.',
+                    image: 'https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=800&q=80'
+                },
+                {
+                    id: 3,
+                    name: 'Tokyo Modern Minimalist Kimono Cardigan',
+                    style: 'Japanese Style',
+                    styleBadge: 'Tokyo Minimalist',
+                    styleIcon: '⛩️',
+                    gender: 'Uniseks',
+                    price: 890000,
+                    originalPrice: 1100000,
+                    rating: 4.91,
+                    reviews: 99,
+                    designer: true,
+                    sizes: ['S', 'M', 'L'],
+                    description: 'Kardigan kimono potongan modern dengan bahan serat bambu Jepang yang adem, halus, dan berpotongan elegan.',
+                    image: 'https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=800&q=80'
+                },
+                {
+                    id: 4,
+                    name: 'Ginza Layered Linen Shirt & Hakama Trouser',
+                    style: 'Japanese Style',
+                    styleBadge: 'Ginza Luxe',
+                    styleIcon: '⛩️',
+                    gender: 'Pria',
+                    price: 1150000,
+                    originalPrice: null,
+                    rating: 4.86,
+                    reviews: 78,
+                    designer: false,
+                    sizes: ['M', 'L', 'XL'],
+                    description: 'Setelan kemeja linen bertumpuk dengan celana hakama modern untuk tampilan terpelajar dan classy.',
+                    image: 'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=800&q=80'
+                },
+
+                // Korean Fashion Styles
+                {
+                    id: 5,
+                    name: 'Seoul Streetwear Cyber Minimalist Blazer',
+                    style: 'Korean Style',
+                    styleBadge: 'Seoul K-Fashion',
+                    styleIcon: '🇰🇷',
+                    gender: 'Uniseks',
+                    price: 1290000,
+                    originalPrice: 1550000,
+                    rating: 4.93,
+                    reviews: 215,
+                    designer: true,
+                    sizes: ['S', 'M', 'L', 'XL'],
+                    description: 'Blazer oversized khas idol Korea era 2026 dengan siluet tegas, aksen kancing Cyan, dan bahan tahan kusut premium.',
+                    image: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&q=80'
+                },
+                {
+                    id: 6,
+                    name: 'K-Style High-Waist Asymmetric Wide Leg Trousers',
+                    style: 'Korean Style',
+                    styleBadge: 'K-Trending',
+                    styleIcon: '🇰🇷',
+                    gender: 'Wanita',
+                    price: 650000,
+                    originalPrice: 790000,
+                    rating: 4.88,
+                    reviews: 150,
+                    designer: false,
+                    sizes: ['XS', 'S', 'M', 'L'],
+                    description: 'Celana kulot high-waist dengan potongan pinggang asimetris yang memberikan kesan kaki lebih jenjang.',
+                    image: 'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=800&q=80'
+                },
+                {
+                    id: 7,
+                    name: 'Hongdae Layered Crop Top & Cardigan Set',
+                    style: 'Korean Style',
+                    styleBadge: 'Hongdae Vibe',
+                    styleIcon: '🇰🇷',
+                    gender: 'Wanita',
+                    price: 480000,
+                    originalPrice: 620000,
+                    rating: 4.92,
+                    reviews: 172,
+                    designer: false,
+                    sizes: ['S', 'M'],
+                    description: 'Setelan dua lapis crop top rajut dan kardigan tipis manis gaya indie Hongdae Seoul.',
+                    image: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&q=80'
+                },
+                {
+                    id: 8,
+                    name: 'Gangnam 2026 Pastel Cyan Oversized Knitwear',
+                    style: 'Korean Style',
+                    styleBadge: 'Gangnam Soft',
+                    styleIcon: '🇰🇷',
+                    gender: 'Uniseks',
+                    price: 850000,
+                    originalPrice: 990000,
+                    rating: 4.95,
+                    reviews: 140,
+                    designer: true,
+                    sizes: ['M', 'L', 'XL'],
+                    description: 'Sweater rajut warna pastel cyan futuristik yang lembut dan memberikan kesan cozy K-Drama aesthetic.',
+                    image: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=800&q=80'
+                },
+
+                // 2026 Techwear & Minimalist
+                {
+                    id: 9,
+                    name: '3D Holographic Cyan Outer Coat 2026',
+                    style: '2026 Techwear',
+                    styleBadge: 'Cyber 2026',
+                    styleIcon: '⚡',
+                    gender: 'Uniseks',
+                    price: 1650000,
+                    originalPrice: 2100000,
+                    rating: 4.99,
+                    reviews: 94,
+                    designer: true,
+                    sizes: ['M', 'L', 'XL'],
+                    description: 'Mantel outerwear holografik berpendar Cyan halus saat terkena cahaya di malam hari.',
+                    image: 'https://images.unsplash.com/photo-1552346154-21d32810aba3?w=800&q=80'
+                },
+                {
+                    id: 10,
+                    name: 'Cyan Modular Tactical Crossbody Bag 2026',
+                    style: 'Minimalist Streetwear',
+                    styleBadge: 'Accessories',
+                    styleIcon: '🌿',
+                    gender: 'Uniseks',
+                    price: 420000,
+                    originalPrice: null,
+                    rating: 4.82,
+                    reviews: 115,
+                    designer: false,
+                    sizes: ['Free Size'],
+                    description: 'Tas selempang kedap air modular dengan kompartemen cepat akses untuk gadget modern.',
+                    image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800&q=80'
+                }
+            ]
+        }
+    },
+
+    computed: {
+        filteredProducts() {
+            return this.products.filter(product => {
+                const matchesSearch = product.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+                                      product.style.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+                                      product.styleBadge.toLowerCase().includes(this.searchQuery.toLowerCase());
+
+                const matchesStyle = this.selectedStyle === 'Semua' || product.style === this.selectedStyle;
+                const matchesPrice = product.price <= this.maxPriceFilter;
+
+                return matchesSearch && matchesStyle && matchesPrice;
+            }).sort((a, b) => {
+                if (this.selectedSort === 'price-low') return a.price - b.price;
+                if (this.selectedSort === 'price-high') return b.price - a.price;
+                if (this.selectedSort === 'rating') return b.rating - a.rating;
+                return 0;
+            });
+        },
+
+        cartTotalCount() {
+            return this.cart.reduce((sum, item) => sum + item.quantity, 0);
+        },
+
+        cartSubtotal() {
+            return this.cart.reduce((sum, item) => sum + (item.product.price * item.quantity), 0);
+        },
+
+        discountAmount() {
+            return (this.cartSubtotal * this.appliedDiscount) / 100;
+        },
+
+        cartFinalTotal() {
+            return Math.max(0, this.cartSubtotal - this.discountAmount);
+        }
+    },
+
+    methods: {
+        formatRupiah(amount) {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                maximumFractionDigits: 0
+            }).format(amount);
+        },
+
+        setActiveStyle(styleName) {
+            this.selectedStyle = styleName;
+        },
+
+        resetFilters() {
+            this.searchQuery = '';
+            this.selectedStyle = 'Semua';
+            this.maxPriceFilter = 2000000;
+            this.selectedSort = 'default';
+        },
+
+        toggleWishlist(id) {
+            const index = this.wishlist.indexOf(id);
+            if (index > -1) {
+                this.wishlist.splice(index, 1);
+                this.showToast('Item dihapus dari wishlist');
+            } else {
+                this.wishlist.push(id);
+                this.showToast('Item ditambahkan ke wishlist ❤️');
+            }
+        },
+
+        isWishlisted(id) {
+            return this.wishlist.includes(id);
+        },
+
+        getProductById(id) {
+            return this.products.find(p => p.id === id);
+        },
+
+        addToCart(product, size = null) {
+            if (!product) return;
+            const chosenSize = size || (product.sizes ? product.sizes[0] : 'M');
+            const existing = this.cart.find(i => i.product.id === product.id && i.size === chosenSize);
+
+            if (existing) {
+                existing.quantity++;
+            } else {
+                this.cart.push({ product, size: chosenSize, quantity: 1 });
+            }
+
+            this.showToast(`${product.name} dimasukkan ke bag!`);
+        },
+
+        addToCartFromQuickView() {
+            if (this.selectedProduct) {
+                this.addToCart(this.selectedProduct, this.quickViewSize);
+                this.closeModal();
+            }
+        },
+
+        updateCartQty(index, delta) {
+            this.cart[index].quantity += delta;
+            if (this.cart[index].quantity <= 0) {
+                this.cart.splice(index, 1);
+            }
+        },
+
+        removeFromCart(index) {
+            this.cart.splice(index, 1);
+            this.showToast('Item dihapus');
+        },
+
+        applyPromo() {
+            if (this.promoInput.toUpperCase() === 'FYFCYAN2026') {
+                this.appliedDiscount = 20;
+                this.showToast('Voucher FYFCYAN2026 Berhasil! Diskon 20% 🎉');
+            } else {
+                this.showToast('Kode voucher tidak ditemukan');
+            }
+        },
+
+        copyVoucher() {
+            this.promoInput = 'FYFCYAN2026';
+            this.openModal('cart');
+            this.applyPromo();
+        },
+
+        openModal(name) {
+            this.activeModal = name;
+        },
+
+        closeModal() {
+            this.activeModal = null;
+            this.selectedProduct = null;
+        },
+
+        openQuickView(product) {
+            this.selectedProduct = product;
+            this.quickViewSize = product.sizes ? product.sizes[0] : 'M';
+            this.activeModal = 'quickview';
+        },
+
+        getStylistRecommendations() {
+            if (this.selectedVibe === 'harajuku') {
+                return this.products.filter(p => p.style === 'Japanese Style');
+            } else if (this.selectedVibe === 'seoul') {
+                return this.products.filter(p => p.style === 'Korean Style');
+            } else if (this.selectedVibe === 'techwear') {
+                return this.products.filter(p => p.style === '2026 Techwear' || p.designer);
+            }
+            return this.products.slice(0, 2);
+        },
+
+        submitNewDesign() {
+            const newProduct = {
+                id: Date.now(),
+                name: this.newDesignForm.name,
+                style: this.newDesignForm.style,
+                styleBadge: 'Cyan Design',
+                styleIcon: '✨',
+                gender: 'Uniseks',
+                price: Number(this.newDesignForm.price),
+                originalPrice: null,
+                rating: 5.0,
+                reviews: 1,
+                designer: true,
+                sizes: ['S', 'M', 'L', 'XL'],
+                description: this.newDesignForm.description,
+                image: this.newDesignForm.image
+            };
+
+            this.products.unshift(newProduct);
+            this.showToast(`Desain "${newProduct.name}" berhasil dirilis! 🎉`);
+            this.openModal('profile');
+
+            // Reset Form
+            this.newDesignForm.name = '';
+            this.newDesignForm.description = '';
+        },
+
+        startCheckout() {
+            this.checkoutStep = 1;
+            this.activeModal = 'checkout';
+        },
+
+        processPayment() {
+            this.orderId = 'CYAN2026-' + Math.floor(100000 + Math.random() * 900000);
+            this.checkoutStep = 2;
+        },
+
+        finishCheckout() {
+            this.cart = [];
+            this.appliedDiscount = 0;
+            this.promoInput = '';
+            this.closeModal();
+            this.showToast('Terima kasih! Pesanan Cyan Anda telah diterima.');
+        },
+
+        showToast(msg) {
+            this.toast.message = msg;
+            this.toast.show = true;
+            setTimeout(() => { this.toast.show = false; }, 2500);
+        },
+
+        startTimer() {
+            setInterval(() => {
+                if (this.countdown.seconds > 0) {
+                    this.countdown.seconds--;
+                } else {
+                    this.countdown.seconds = 59;
+                    if (this.countdown.minutes > 0) {
+                        this.countdown.minutes--;
+                    } else {
+                        this.countdown.minutes = 59;
+                        if (this.countdown.hours > 0) {
+                            this.countdown.hours--;
+                        }
+                    }
+                }
+            }, 1000);
+        }
+    },
+
+    mounted() {
+        this.startTimer();
+    }
+}).mount('#app');
+</script>
+
+</body>
+</html>
